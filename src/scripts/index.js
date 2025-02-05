@@ -1,7 +1,7 @@
 import '../pages/index.css';
 import {initialCards, createCard} from "./cards.js";
 import {closeModal, openModal} from './modal.js';
-import {formElement, handleFormSubmit} from "./submit.js";
+import {formElement, handleFormSubmit} from "./forms.js";
 
 // @todo: DOM узлы
    const placesList = document.querySelector('.places__list');
@@ -23,6 +23,9 @@ import {formElement, handleFormSubmit} from "./submit.js";
 
    profileAddButton.addEventListener("click", () => openModal(popupTypeNewCard));
    profileEditButton.addEventListener("click", () => openModal(popupTypeEdit));
+
+
+   formElement.addEventListener("submit", handleFormSubmit);
 
 
 

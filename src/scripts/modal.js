@@ -35,9 +35,6 @@ function closePopupEsc (evt) {
    };
 };
 
-function saveButton () {
-   
-}
 
 export {openModal, closeModal};
 
