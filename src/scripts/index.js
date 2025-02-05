@@ -1,27 +1,15 @@
 import '../pages/index.css';
-import {initialCards} from './cards.js';
-import * as modal from './modal.js';
+import {initialCards, createCard} from "./cards.js";
+import {closeModal, openModal} from './modal.js';
+import {formElement, handleFormSubmit} from "./submit.js";
 
-// @todo: Темплейт карточки
-   const cardTemplate = document.querySelector('#card-template').content;
 // @todo: DOM узлы
    const placesList = document.querySelector('.places__list');
-// @todo: Функция создания карточки
-   function createCard (element) {
-      const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
-      const deleteButton = cardElement.querySelector('.card__delete-button');
-      const cardImage = cardElement.querySelector('.card__image');
-      cardElement.querySelector('.card__title').textContent = element.name;
-      cardImage.src = element.link;
-      cardImage.alt = element.name;
-      deleteButton.addEventListener('click', () => deleteCard(cardElement));
-      return cardElement;
-   }
-// @todo: Функция удаления карточки
+   const profileAddButton = document.querySelector(".profile__add-button");
+   const profileEditButton = document.querySelector(".profile__edit-button");
+   const popupTypeEdit = document.querySelector(".popup_type_edit");
+   const popupTypeNewCard = document.querySelector(".popup_type_new-card");
 
-   function deleteCard(card) {
-      card.remove();
-   } 
 
 // @todo: Вывести карточки на страницу
    function addCard (item) {
@@ -32,6 +20,14 @@ import * as modal from './modal.js';
    }
    
    addCard(initialCards)
+
+   profileAddButton.addEventListener("click", () => openModal(popupTypeNewCard));
+   profileEditButton.addEventListener("click", () => openModal(popupTypeEdit));
+
+
+
+
+
 
 
    
