@@ -41,7 +41,7 @@ const initialCards = [
 
 // @todo: Функция создания карточки
 
-  function createCard (cardInfo, deleteCard, likeCard) {
+  function createCard (cardInfo,  deleteCardHandler, likeCardHandler) {
     const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
     const deleteButton = cardElement.querySelector('.card__delete-button');
     const likeButton = cardElement.querySelector('.card__like-button');
@@ -49,8 +49,8 @@ const initialCards = [
     cardElement.querySelector('.card__title').textContent = cardInfo.name;
     cardImage.src = cardInfo.link;
     cardImage.alt = cardInfo.name;
-    deleteButton.addEventListener('click', () => deleteCard);
-    likeButton.addEventListener('click', () => likeCard);
+    deleteButton.addEventListener('click', () =>  deleteCardHandler);
+    likeButton.addEventListener('click', () => likeCardHandler);
     return cardElement;
   };
 
@@ -68,9 +68,12 @@ const initialCards = [
 // @todo: Функция удаления карточки
      
   function deleteCard(evt) {
-    const card = evt.target.closest('.places__item');
+    const card = evt.target.closest('.card');
     card.remove();
   };
+
+  console.log(deleteCard());
+
 
 
 // @todo: Функция лайка карточки  
@@ -78,6 +81,8 @@ const initialCards = [
   function likeCard (evt) {
       evt.target.classList.toggle('card__like-button_is-active');
   };
+
+  console.log(likeCard());
 
   
   export {createCard, deleteCard, likeCard};
