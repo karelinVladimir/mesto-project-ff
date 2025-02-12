@@ -49,8 +49,8 @@ const initialCards = [
     cardElement.querySelector('.card__title').textContent = cardInfo.name;
     cardImage.src = cardInfo.link;
     cardImage.alt = cardInfo.name;
-    deleteButton.addEventListener('click', () =>  deleteCardHandler);
-    likeButton.addEventListener('click', () => likeCardHandler);
+    deleteButton.addEventListener('click', deleteCardHandler);
+    likeButton.addEventListener('click', likeCardHandler);
     return cardElement;
   };
 
@@ -72,17 +72,12 @@ const initialCards = [
     card.remove();
   };
 
-  console.log(deleteCard());
-
-
 
 // @todo: Функция лайка карточки  
 
   function likeCard (evt) {
       evt.target.classList.toggle('card__like-button_is-active');
   };
-
-  console.log(likeCard());
 
   
   export {createCard, deleteCard, likeCard};
