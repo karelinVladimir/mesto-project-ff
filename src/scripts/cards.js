@@ -1,4 +1,4 @@
-import { openModal } from "./modal";
+import {openModal} from "./modal";
 
 const Arkhyz = new URL("https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg", import.meta.url);
 const chelyabinskRegion = new URL("https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg", import.meta.url);
@@ -85,9 +85,9 @@ const initialCards = [
 // @todo: Функция попап изображения  
 
   function popupImage (cardImage, cardTitle) {
-    const popupTypeImage = document.querySelector(".popup_type_image");
-    const popupImageCard = document.querySelector(".popup__image");
-    const popupImageTitle = document.querySelector(".popup__caption");
+    const popupTypeImage = document.querySelector('.popup_type_image');
+    const popupImageCard = document.querySelector('.popup__image');
+    const popupImageTitle = document.querySelector('.popup__caption');
     popupImageCard.src = cardImage.src;
     popupImageCard.alt = cardImage.alt;
     popupImageTitle.textContent = cardTitle.textContent;
