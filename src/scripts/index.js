@@ -1,5 +1,5 @@
 import '../pages/index.css';
-import {createCard, deleteCard, likeCard} from './cards.js';
+import { createCard, deleteCard, likeCard, popupImage} from "./cards.js";
 import {closeModal, openModal} from './modal.js';
 
 // @todo: DOM узлы
@@ -58,7 +58,7 @@ import {closeModal, openModal} from './modal.js';
          name: placeName.value,
          link: placeLink.value
       };
-      document.querySelector('.places__list').prepend(createCard(newCard, deleteCard, likeCard));
+      document.querySelector('.places__list').prepend(createCard(newCard, deleteCard, likeCard, popupImage));
       closeModal(popupNewCard);
       placeForm.reset();
    };

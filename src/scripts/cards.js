@@ -1,3 +1,4 @@
+import { openModal } from "./modal";
 
 const Arkhyz = new URL("https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg", import.meta.url);
 const chelyabinskRegion = new URL("https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg", import.meta.url);
@@ -41,16 +42,18 @@ const initialCards = [
 
 // @todo: Функция создания карточки
 
-  function createCard (cardInfo,  deleteCardHandler, likeCardHandler) {
+  function createCard (cardInfo,  deleteCardHandler, likeCardHandler, clickImageHandler) {
     const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
     const deleteButton = cardElement.querySelector('.card__delete-button');
     const likeButton = cardElement.querySelector('.card__like-button');
     const cardImage = cardElement.querySelector('.card__image');
-    cardElement.querySelector('.card__title').textContent = cardInfo.name;
+    const cardTitle = cardElement.querySelector('.card__title');
+    cardTitle.textContent = cardInfo.name;
     cardImage.src = cardInfo.link;
     cardImage.alt = cardInfo.name;
     deleteButton.addEventListener('click', deleteCardHandler);
     likeButton.addEventListener('click', likeCardHandler);
+    cardImage.addEventListener("click", () => clickImageHandler(cardImage, cardTitle));
     return cardElement;
   };
 
@@ -58,7 +61,7 @@ const initialCards = [
 
   function addCard (item) {
     item.forEach(card => {
-      const cards = createCard(card, deleteCard, likeCard);
+      const cards = createCard(card, deleteCard, likeCard, popupImage);
       placesList.append(cards);
     });  
  };
@@ -79,8 +82,20 @@ const initialCards = [
       evt.target.classList.toggle('card__like-button_is-active');
   };
 
+// @todo: Функция попап изображения  
+
+  function popupImage (cardImage, cardTitle) {
+    const popupTypeImage = document.querySelector(".popup_type_image");
+    const popupImageCard = document.querySelector(".popup__image");
+    const popupImageTitle = document.querySelector(".popup__caption");
+    popupImageCard.src = cardImage.src;
+    popupImageCard.alt = cardImage.alt;
+    popupImageTitle.textContent = cardTitle.textContent;
+    openModal(popupTypeImage);
+  };
+
   
-  export {createCard, deleteCard, likeCard};
+  export {createCard, deleteCard, likeCard, popupImage};
 
 
 
