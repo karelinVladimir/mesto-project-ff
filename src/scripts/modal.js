@@ -12,15 +12,12 @@ function closeModal(element) {
   document.removeEventListener('click', closePopupButton);
 };
 
- function closePopupButton () {
-   const popupCloseButton = document.querySelectorAll('.popup__close');
-   popupCloseButton.forEach((element) => {
-     element.addEventListener('click', () => {
-       const closeButton = element.closest('.popup');
-       closeModal(closeButton);
-     });
-   });
- };
+function closePopupButton (evt) {
+  if (evt.target.classList.contains('popup__close')) {
+    const popup = evt.target.closest('.popup');
+    closeModal(popup);
+  };
+};
 
 function closePopupBg (evt) {
    if (evt.target.classList.contains('popup')) {
