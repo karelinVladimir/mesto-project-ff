@@ -1,113 +1,100 @@
-import '../pages/index.css';
+import "../pages/index.css";
 import { createCard, callbacks } from "./cards.js";
-import { closeModal, openModal } from './modal.js';
-import { initialCards } from './initialCards.js';
-
+import { closeModal, openModal } from "./modal.js";
+import { initialCards } from "./initialCards.js";
+callbacks.clickImageHandler = openImagePopup;
 
 // @todo: Карточки
 
-   const placesList = document.querySelector('.places__list');
+const placesList = document.querySelector(".places__list");
 
 // @todo: Новые карточки
 
-   const popupNewCard = document.querySelector('.popup_type_new-card');
-   const placeForm = document.forms['new-place'];
-
-// @todo: Редактирование профиля
-
-   const popupProfile = document.querySelector('.popup_type_edit');
-   const profileForm = document.forms['edit-profile'];
-   const nameInput = profileForm.elements.name;
-   const jobInput = profileForm.elements.description;
-   const profileTitle = document.querySelector('.profile__title');
-   const profileDescription = document.querySelector('.profile__description');
-   const profileCloseButton = document.querySelector('.popup__close');
+const popupNewCard = document.querySelector(".popup_type_new-card");
+const placeForm = document.forms["new-place"];
 
 // @todo: Открытие попапов
 
-   const profileAddButton = document.querySelector('.profile__add-button');
-   const profileEditButton = document.querySelector('.profile__edit-button');
-   const popupTypeEdit = document.querySelector('.popup_type_edit');
-   const popupTypeNewCard = document.querySelector('.popup_type_new-card');
+const profileAddButton = document.querySelector(".profile__add-button");
+const profileEditButton = document.querySelector(".profile__edit-button");
+const popupTypeEdit = document.querySelector(".popup_type_edit");
+const popupTypeNewCard = document.querySelector(".popup_type_new-card");
+
+// @todo: Редактирование профиля
+
+const popupProfile = document.querySelector(".popup_type_edit");
+const profileForm = document.forms["edit-profile"];
+const nameInput = profileForm.elements.name;
+const jobInput = profileForm.elements.description;
+const profileTitle = document.querySelector(".profile__title");
+const profileDescription = document.querySelector(".profile__description");
+
+// @todo: Попап изображения
+
+const popupTypeImage = document.querySelector(".popup_type_image");
+const popupImageCard = document.querySelector(".popup__image");
+const popupImageTitle = document.querySelector(".popup__caption");
 
 // @todo: Функция карточки на страницу
 
-   function addCard (item) {
-      item.forEach(card => {
-      const cards = createCard(card, callbacks);
-      placesList.append(cards);
-      });  
-   };
+function renderCard(item, method = "prepend") {
+  const cardElement = createCard(item, callbacks);
+  placesList[method](cardElement);
+}
 
-   addCard(initialCards);
+function addCards(items) {
+  items.forEach((card) => {
+    renderCard(card, "append");
+  });
+}
+
+function handleCardFormSubmit(evt) {
+  evt.preventDefault();
+  const placeName = placeForm.elements["place-name"];
+  const placeLink = placeForm.elements.link;
+  const item = {
+    name: placeName.value,
+    link: placeLink.value,
+  };
+  renderCard(item);
+  closeModal(popupNewCard);
+  placeForm.reset();
+}
+
+placeForm.addEventListener("submit", handleCardFormSubmit);
+
+addCards(initialCards);
 
 // Открытие попапов
 
-   profileAddButton.addEventListener('click', () => openModal(popupTypeNewCard));
-   profileEditButton.addEventListener('click', () => openModal(popupTypeEdit), fillProfileInputs());
+profileAddButton.addEventListener("click", () => openModal(popupTypeNewCard));
+profileEditButton.addEventListener(
+  "click",
+  () => openModal(popupTypeEdit),
+  fillProfileInputs()
+);
 
 // попап, редактирование профиля
 
-   function fillProfileInputs () {
-      nameInput.value = profileTitle.textContent;
-      jobInput.value = profileDescription.textContent;
-   };
+function fillProfileInputs() {
+  nameInput.value = profileTitle.textContent;
+  jobInput.value = profileDescription.textContent;
+}
 
-   function handleProfileFormSubmit(evt) {
-      evt.preventDefault();
-      profileTitle.textContent = nameInput.value;
-      profileDescription.textContent = jobInput.value;
-      closeModal(popupProfile);
-   };
+function handleProfileFormSubmit(evt) {
+  evt.preventDefault();
+  profileTitle.textContent = nameInput.value;
+  profileDescription.textContent = jobInput.value;
+  closeModal(popupProfile);
+}
 
-// Возможно, я неправильно реализовал ТЗ.
-// Если пользователь закрывает модальное окно нажав на крестик, то введённые значения не сохраняются
+profileForm.addEventListener("submit", handleProfileFormSubmit);
 
-   profileCloseButton.addEventListener('click', () => {
-      fillProfileInputs ();
-   });
+// @todo: Функция. открытие попапа с картинкой
 
-   profileForm.addEventListener('submit', handleProfileFormSubmit);
-
-// Функция, добавление карточки
-
-   function renderCard (evt, item, method = 'prepend') {
-      evt.preventDefault();
-      const placeName = placeForm.elements['place-name'];
-      const placeLink = placeForm.elements.link;
-      item = {
-         name: placeName.value,
-         link: placeLink.value
-      };
-      const cardElement = createCard(item, callbacks);
-      placesList[method](cardElement);
-      closeModal(popupNewCard);
-      placeForm.reset();
-   };
-
-   placeForm.addEventListener('submit', renderCard);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   
-
-
-
-
-
-
-
- 
+function openImagePopup(cardImage, cardTitle) {
+  popupImageCard.src = cardImage.src;
+  popupImageCard.alt = cardImage.alt;
+  popupImageTitle.textContent = cardTitle.textContent;
+  openModal(popupTypeImage);
+}
