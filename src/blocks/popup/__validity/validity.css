@@ -12,3 +12,17 @@
 .popup__input-error_active {
    visibility: visible;
 }
+
+.button_inactive {
+   color: #000;
+   background: #fff;
+   box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.15);
+   border: 1px solid #000;
+   opacity: 0.2;
+   border-radius: 2px;
+}
+
+.button_inactive:hover {
+   background: none;
+   cursor: default;
+}
