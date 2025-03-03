@@ -2,8 +2,8 @@ import "../pages/index.css";
 import { createCard, callbacks } from "./cards.js";
 import { closeModal, openModal } from "./modal.js";
 import { initialCards } from "./initialCards.js";
-// import { validate } from "webpack";
 callbacks.clickImageHandler = openImagePopup;
+import { enableValidation, clearValidation } from "./validation.js";
 
 // @todo: Карточки
 
@@ -99,6 +99,37 @@ function openImagePopup(cardImage, cardTitle) {
   popupImageTitle.textContent = cardTitle.textContent;
   openModal(popupTypeImage);
 }
+
+// @todo: Валидация
+
+const validationConfig = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "popup__button_disabled",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__error_visible",
+};
+
+
+clearValidation(profileForm, validationConfig);
+clearValidation(placeForm, validationConfig);
+
+enableValidation({
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "popup__button_disabled",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__error_visible",
+}); 
+
+
+
+
+
+
+
 
 
 
