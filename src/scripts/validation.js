@@ -50,7 +50,7 @@ const isValid = (
   }
 };
 
-// @todo: Функция доюавления обработчика событий на все поля
+// @todo: Функция добавления обработчика событий на все поля
 
 const setEventListeners = (
   formElement,
@@ -63,7 +63,8 @@ const setEventListeners = (
   }
 ) => {
   const inputList = Array.from(formElement.querySelectorAll(inputSelector));
-  const buttonElement = document.querySelector(submitButtonSelector);
+  const buttonElement = formElement.querySelector(submitButtonSelector);
+  toggleButtonState(inputList, buttonElement, inactiveButtonClass);
   inputList.forEach((inputElement) => {
     inputElement.addEventListener("input", () => {
       isValid(formElement, inputElement, { inputErrorClass, errorClass });
@@ -131,5 +132,10 @@ export const clearValidation = (
   inputList.forEach((inputElement) => {
     hideInputError(formElement, inputElement, {inputErrorClass, errorClass});
   });
-  toggleButtonState(inputList, buttonElement, inactiveButtonClass);
+    toggleButtonState(inputList, buttonElement, inactiveButtonClass); 
 };
+
+
+
+
+

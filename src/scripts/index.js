@@ -60,6 +60,7 @@ function handleCardFormSubmit(evt) {
   renderCard(item);
   closeModal(popupNewCard);
   placeForm.reset();
+  clearValidation(placeForm, validationConfig);
 }
 
 placeForm.addEventListener("submit", handleCardFormSubmit);
@@ -72,7 +73,7 @@ profileAddButton.addEventListener("click", () => openModal(popupTypeNewCard));
 profileEditButton.addEventListener(
   "click",
   () => openModal(popupTypeEdit),
-  fillProfileInputs()
+  fillProfileInputs(), 
 );
 
 // попап, редактирование профиля
@@ -112,17 +113,18 @@ const validationConfig = {
 };
 
 
-clearValidation(profileForm, validationConfig);
-clearValidation(placeForm, validationConfig);
+enableValidation(validationConfig); 
 
-enableValidation({
-  formSelector: ".popup__form",
-  inputSelector: ".popup__input",
-  submitButtonSelector: ".popup__button",
-  inactiveButtonClass: "popup__button_disabled",
-  inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__error_visible",
-}); 
+
+// import { getInitialCards } from "./api.js";
+
+// getInitialCards()
+//   .then((result) => {
+//     // обрабатываем результат
+//   })
+//   .catch((err) => {
+//     console.log(err); // выводим ошибку в консоль
+//   }); 
 
 
 
