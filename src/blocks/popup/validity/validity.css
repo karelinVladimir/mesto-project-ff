@@ -1,9 +1,10 @@
-.popup__input_hidden {
+.popup__error_hidden {
+  display: block;
+  height: 26px;
   visibility: hidden;
   font-weight: 400;
   font-size: 12px;
   color: #f00;
-  height: 10px;
   min-height: 10px;
 }
 

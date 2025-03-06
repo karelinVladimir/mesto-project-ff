@@ -4,6 +4,7 @@ import { closeModal, openModal } from "./modal.js";
 import { initialCards } from "./initialCards.js";
 callbacks.clickImageHandler = openImagePopup;
 import { enableValidation, clearValidation } from "./validation.js";
+import { getInitialCards, getAddCard } from "./api.js";
 
 // @todo: Карточки
 
@@ -65,8 +66,6 @@ function handleCardFormSubmit(evt) {
 
 placeForm.addEventListener("submit", handleCardFormSubmit);
 
-addCards(initialCards);
-
 // Открытие попапов
 
 profileAddButton.addEventListener("click", () => openModal(popupTypeNewCard));
@@ -115,16 +114,20 @@ const validationConfig = {
 
 enableValidation(validationConfig); 
 
+//api
 
-// import { getInitialCards } from "./api.js";
+getInitialCards()
+  .then((result) => {
+    addCards(result)
+  })
+  .catch((err) => {
+    console.log(err); // выводим ошибку в консоль
+  }); 
 
-// getInitialCards()
-//   .then((result) => {
-//     // обрабатываем результат
-//   })
-//   .catch((err) => {
-//     console.log(err); // выводим ошибку в консоль
-//   }); 
+  getAddCard(renderCard)
+    .catch((err) => {
+      console.log(err); // выводим ошибку в консоль
+    }); 
 
 
 
