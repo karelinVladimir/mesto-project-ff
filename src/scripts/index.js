@@ -4,7 +4,7 @@ import { closeModal, openModal } from "./modal.js";
 import { initialCards } from "./initialCards.js";
 callbacks.clickImageHandler = openImagePopup;
 import { enableValidation, clearValidation } from "./validation.js";
-import { getInitialCards, getAddCard } from "./api.js";
+import { getInitialCards, getAddCard, getMeId } from "./api.js";
 
 // @todo: Карточки
 
@@ -118,16 +118,24 @@ enableValidation(validationConfig);
 
 getInitialCards()
   .then((result) => {
-    addCards(result)
+    addCards(result);
   })
   .catch((err) => {
     console.log(err); // выводим ошибку в консоль
   }); 
 
-  getAddCard(renderCard)
-    .catch((err) => {
-      console.log(err); // выводим ошибку в консоль
-    }); 
+  getMeId()
+  .then((result) => {
+    console.log(result)
+  })
+  .catch((err) => {
+    console.log(err);
+  })
+
+  // getAddCard()
+  //   .catch((err) => {
+  //     console.log(err); // выводим ошибку в консоль
+  //   }); 
 
 
 

@@ -6,16 +6,29 @@ const config = {
   },
 };
 
+function responseOk (res)  {
+  if (res.ok) {
+      return res.json();
+    }
+        // если ошибка, отклоняем промис
+    return Promise.reject(`Ошибка: ${res.status}`);
+}
+
+const meId = "https://nomoreparties.co/v1/wff-cohort-32/users/me";
+
+export const  getMeId = () => {
+  return fetch(meId, {
+    headers:config.headers,
+  }).then((res) => {
+      responseOk(res);
+  })
+}
+
 export const getInitialCards = () => {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers,
   }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-
-    // если ошибка, отклоняем промис
-    return Promise.reject(`Ошибка: ${res.status}`);
+    responseOk(res);
   });
 }; 
 
