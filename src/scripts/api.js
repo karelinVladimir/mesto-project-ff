@@ -18,18 +18,16 @@ const meId = "https://nomoreparties.co/v1/wff-cohort-32/users/me";
 
 export const  getMeId = () => {
   return fetch(meId, {
-    headers:config.headers,
-  }).then((res) => {
-      responseOk(res);
+    headers: config.headers,
   })
+    .then(responseOk);
 }
 
 export const getInitialCards = () => {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers,
-  }).then((res) => {
-    responseOk(res);
-  });
+  })
+    .then(responseOk);
 }; 
 
 export const getAddCard = (data) => {
