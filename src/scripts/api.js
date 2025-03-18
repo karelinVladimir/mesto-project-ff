@@ -16,7 +16,7 @@ function responseOk (res)  {
 
 const meId = "https://nomoreparties.co/v1/wff-cohort-32/users/me";
 
-export const  getMeId = () => {
+export const  getUserMe = () => {
   return fetch(meId, {
     headers: config.headers,
   })
@@ -30,11 +30,15 @@ export const getInitialCards = () => {
     .then(responseOk);
 }; 
 
-export const getAddCard = (data) => {
+export const getRenderCard = (name, link) => {
   return fetch(`${config.baseUrl}/cards`, {
     method: "POST",
     headers: config.headers,
-    body: JSON.stringify(data)
+    body: JSON.stringify({
+      name: name,
+      link: link,
+    }),
   })
+  .then(responseOk);
 }; 
 

@@ -1,10 +1,9 @@
 import "../pages/index.css";
 import { createCard, callbacks } from "./cards.js";
 import { closeModal, openModal } from "./modal.js";
-import { initialCards } from "./initialCards.js";
 callbacks.clickImageHandler = openImagePopup;
 import { enableValidation, clearValidation } from "./validation.js";
-import { getInitialCards, getAddCard, getMeId } from "./api.js";
+import { getInitialCards, getRenderCard, getUserMe } from "./api.js";
 
 // @todo: Карточки
 
@@ -37,31 +36,37 @@ const popupTypeImage = document.querySelector(".popup_type_image");
 const popupImageCard = document.querySelector(".popup__image");
 const popupImageTitle = document.querySelector(".popup__caption");
 
-// @todo: Функция карточки на страницу
+// @todo: Добавление карточки на страницу
 
 function renderCard(item, method = "prepend") {
   const cardElement = createCard(item, callbacks);
   placesList[method](cardElement);
 }
 
-function addCards(items) {
-  items.forEach((card) => {
-    renderCard(card, "append");
+getInitialCards()
+  .then((result) => {
+    result.forEach((card) => {
+      renderCard(card, "append");
+    });
+  })
+  .catch((err) => {
+    console.error("Ошибка", err);
   });
-}
 
 function handleCardFormSubmit(evt) {
   evt.preventDefault();
-  const placeName = placeForm.elements["place-name"];
-  const placeLink = placeForm.elements.link;
-  const item = {
-    name: placeName.value,
-    link: placeLink.value,
-  };
-  renderCard(item);
-  closeModal(popupNewCard);
-  placeForm.reset();
-  clearValidation(placeForm, validationConfig);
+  const placeName = placeForm.elements["place-name"].value;
+  const placeLink = placeForm.elements.link.value;
+  getRenderCard(placeName, placeLink)
+    .then((newCard) => {
+      renderCard(newCard);
+      closeModal(popupNewCard);
+      placeForm.reset();
+      clearValidation(placeForm, validationConfig);
+    })
+    .catch((err) => {
+      console.error("Ошибка", err);
+    });
 }
 
 placeForm.addEventListener("submit", handleCardFormSubmit);
@@ -72,15 +77,24 @@ profileAddButton.addEventListener("click", () => openModal(popupTypeNewCard));
 profileEditButton.addEventListener(
   "click",
   () => openModal(popupTypeEdit),
-  fillProfileInputs(), 
+        fillProfileInputs(),
 );
 
 // попап, редактирование профиля
 
+getUserMe()
+  .then((result) => {
+    profileTitle.textContent = result.name;
+    profileDescription.textContent = result.about;
+  })
+  .catch((err) => {
+    console.error("Ошибка", err);
+  });
+
 function fillProfileInputs() {
-  nameInput.value = profileTitle.textContent;
-  jobInput.value = profileDescription.textContent;
-}
+    nameInput.value = profileTitle.textContent;
+    jobInput.value = profileDescription.textContent;
+  }
 
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
@@ -88,6 +102,7 @@ function handleProfileFormSubmit(evt) {
   profileDescription.textContent = jobInput.value;
   closeModal(popupProfile);
 }
+
 
 profileForm.addEventListener("submit", handleProfileFormSubmit);
 
@@ -114,28 +129,11 @@ const validationConfig = {
 
 enableValidation(validationConfig); 
 
-//api
 
-getInitialCards()
-  .then((result) => {
-    addCards(result);
-  })
-  .catch((err) => {
-    console.log(err); // выводим ошибку в консоль
-  }); 
 
-  getMeId()
-  .then((result) => {
-    console.log(result)
-  })
-  .catch((err) => {
-    console.log(err);
-  })
 
-  // getAddCard()
-  //   .catch((err) => {
-  //     console.log(err); // выводим ошибку в консоль
-  //   }); 
+
+
 
 
 
