@@ -3,7 +3,7 @@ import { createCard, callbacks } from "./cards.js";
 import { closeModal, openModal } from "./modal.js";
 callbacks.clickImageHandler = openImagePopup;
 import { enableValidation, clearValidation } from "./validation.js";
-import { getInitialCards, getRenderCard, getUserMe } from "./api.js";
+import { getInitialCards, getRenderCard, getUserMe, getEdidProfile } from "./api.js";
 
 // @todo: Карточки
 
@@ -67,7 +67,7 @@ function handleCardFormSubmit(evt) {
     .catch((err) => {
       console.error("Ошибка", err);
     });
-}
+};
 
 placeForm.addEventListener("submit", handleCardFormSubmit);
 
@@ -76,8 +76,11 @@ placeForm.addEventListener("submit", handleCardFormSubmit);
 profileAddButton.addEventListener("click", () => openModal(popupTypeNewCard));
 profileEditButton.addEventListener(
   "click",
-  () => openModal(popupTypeEdit),
-        fillProfileInputs(),
+  () => {
+    openModal(popupTypeEdit);
+    fillProfileInputs();
+    clearValidation(profileForm, validationConfig);
+  }
 );
 
 // попап, редактирование профиля
@@ -94,14 +97,18 @@ getUserMe()
 function fillProfileInputs() {
     nameInput.value = profileTitle.textContent;
     jobInput.value = profileDescription.textContent;
-  }
+  };
 
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
-  profileTitle.textContent = nameInput.value;
-  profileDescription.textContent = jobInput.value;
+  getEdidProfile(nameInput.value, jobInput.value) 
+    .catch((err) => {
+      console.error("Ошибка", err);
+    });
+  // profileTitle.textContent = nameInput.value;
+  // profileDescription.textContent = jobInput.value;
   closeModal(popupProfile);
-}
+};
 
 
 profileForm.addEventListener("submit", handleProfileFormSubmit);
@@ -113,7 +120,7 @@ function openImagePopup(cardImage, cardTitle) {
   popupImageCard.alt = cardImage.alt;
   popupImageTitle.textContent = cardTitle.textContent;
   openModal(popupTypeImage);
-}
+};
 
 // @todo: Валидация
 

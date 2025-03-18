@@ -14,10 +14,8 @@ function responseOk (res)  {
     return Promise.reject(`Ошибка: ${res.status}`);
 }
 
-const meId = "https://nomoreparties.co/v1/wff-cohort-32/users/me";
-
 export const  getUserMe = () => {
-  return fetch(meId, {
+  return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers,
   })
     .then(responseOk);
@@ -37,8 +35,21 @@ export const getRenderCard = (name, link) => {
     body: JSON.stringify({
       name: name,
       link: link,
-    }),
+    })
   })
   .then(responseOk);
 }; 
+
+export const  getEdidProfile = (name, about) => {
+  return fetch(`${config.baseUrl}/users/me`, {
+    method: "PATCH",
+    headers: config.headers,
+    body: JSON.stringify({
+      name: name,
+      about: about,
+    })
+  })
+  .then(responseOk);
+};
+
 
