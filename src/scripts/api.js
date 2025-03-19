@@ -21,6 +21,12 @@ export const  getUserMe = () => {
     .then(responseOk);
 }
 
+export const getUsersData = () => {
+  return fetch(`${config.baseUrl}/users`, {
+    headers: config.headers,
+  }).then(responseOk);
+};
+
 export const getInitialCards = () => {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers,
@@ -40,7 +46,7 @@ export const getRenderCard = (name, link) => {
   .then(responseOk);
 }; 
 
-export const  getEdidProfile = (name, about) => {
+export const  getEditProfile = (name, about) => {
   return fetch(`${config.baseUrl}/users/me`, {
     method: "PATCH",
     headers: config.headers,

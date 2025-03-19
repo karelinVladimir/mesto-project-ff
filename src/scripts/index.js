@@ -3,7 +3,13 @@ import { createCard, callbacks } from "./cards.js";
 import { closeModal, openModal } from "./modal.js";
 callbacks.clickImageHandler = openImagePopup;
 import { enableValidation, clearValidation } from "./validation.js";
-import { getInitialCards, getRenderCard, getUserMe, getEdidProfile } from "./api.js";
+import {
+  getInitialCards,
+  getRenderCard,
+  getUserMe,
+  getEditProfile,
+  getUsersData,
+} from "./api.js";
 
 // @todo: Карточки
 
@@ -38,15 +44,16 @@ const popupImageTitle = document.querySelector(".popup__caption");
 
 // @todo: Добавление карточки на страницу
 
-function renderCard(item, method = "prepend") {
-  const cardElement = createCard(item, callbacks);
+function renderCard(item, userId, method = "prepend") {
+  const cardElement = createCard(item, userId, callbacks);
   placesList[method](cardElement);
 }
 
-getInitialCards()
-  .then((result) => {
-    result.forEach((card) => {
-      renderCard(card, "append");
+Promise.all([getInitialCards(), getUsersData()])
+  .then(([cards, userData]) => { 
+    const userId = userData._id
+    cards.forEach(card => {
+      renderCard(card, userId, "append");
     });
   })
   .catch((err) => {
@@ -101,7 +108,7 @@ function fillProfileInputs() {
 
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
-  getEdidProfile(nameInput.value, jobInput.value) 
+  getEditProfile(nameInput.value, jobInput.value) 
     .catch((err) => {
       console.error("Ошибка", err);
     });
