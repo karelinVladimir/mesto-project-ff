@@ -16,7 +16,7 @@ function createCard(
   const likeCount = cardElement.querySelector(".card__like-count");
   const userCardId = cardInfo.owner._id === userId;
   if (userCardId) {
-    deleteButton.addEventListener("click", deleteCardHandler);
+    deleteButton.classList.remove("card__delete-button_inactive");
   } else {
     deleteButton.classList.add("card__delete-button_inactive");
   }
@@ -24,7 +24,7 @@ function createCard(
   cardImage.src = cardInfo.link;
   cardImage.alt = cardInfo.name; 
   likeCount.textContent = cardInfo.likes.length;
-  
+  deleteButton.addEventListener("click", deleteCardHandler);
   likeButton.addEventListener("click", likeCardHandler);
   cardImage.addEventListener("click", () =>
     clickImageHandler(cardImage, cardTitle)

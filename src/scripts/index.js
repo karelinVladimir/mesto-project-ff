@@ -6,9 +6,9 @@ import { enableValidation, clearValidation } from "./validation.js";
 import {
   getInitialCards,
   getRenderCard,
-  getUserMe,
-  getEditProfile,
   getUsersData,
+  getEditProfile,
+  getDeleteCard,
 } from "./api.js";
 
 // @todo: Карточки
@@ -50,8 +50,9 @@ function renderCard(item, userId, method = "prepend") {
 }
 
 Promise.all([getInitialCards(), getUsersData()])
-  .then(([cards, userData]) => { 
-    const userId = userData._id
+  .then(([cards, users]) => { 
+    const userId = users._id
+    console.log(userId);
     cards.forEach(card => {
       renderCard(card, userId, "append");
     });
@@ -66,7 +67,7 @@ function handleCardFormSubmit(evt) {
   const placeLink = placeForm.elements.link.value;
   getRenderCard(placeName, placeLink)
     .then((newCard) => {
-      renderCard(newCard);
+      renderCard(newCard, userId);
       closeModal(popupNewCard);
       placeForm.reset();
       clearValidation(placeForm, validationConfig);
@@ -77,6 +78,16 @@ function handleCardFormSubmit(evt) {
 };
 
 placeForm.addEventListener("submit", handleCardFormSubmit);
+
+// Удаление картоки на страницею
+
+getDeleteCard() 
+  then(() => {
+
+  })
+  .catch((err) => {
+    console.error("Ошибка", err);
+  });
 
 // Открытие попапов
 
@@ -92,7 +103,7 @@ profileEditButton.addEventListener(
 
 // попап, редактирование профиля
 
-getUserMe()
+getUsersData()
   .then((result) => {
     profileTitle.textContent = result.name;
     profileDescription.textContent = result.about;
@@ -112,8 +123,6 @@ function handleProfileFormSubmit(evt) {
     .catch((err) => {
       console.error("Ошибка", err);
     });
-  // profileTitle.textContent = nameInput.value;
-  // profileDescription.textContent = jobInput.value;
   closeModal(popupProfile);
 };
 
@@ -142,6 +151,7 @@ const validationConfig = {
 
 
 enableValidation(validationConfig); 
+
 
 
 
