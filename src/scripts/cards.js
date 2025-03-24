@@ -19,6 +19,7 @@ function createCard(
   const userCardId = cardInfo.owner._id === userId;
   if (userCardId) {
     deleteButton.classList.remove("card__delete-button_inactive");
+    deleteButton.addEventListener("click", () => deleteCardHandler(cardInfo._id, cardElement));
   } else {
     deleteButton.classList.add("card__delete-button_inactive");
   }
@@ -26,9 +27,6 @@ function createCard(
   cardImage.src = cardInfo.link;
   cardImage.alt = cardInfo.name; 
   likeCount.textContent = cardInfo.likes.length;
-  if (userCardId) {
-    deleteButton.addEventListener("click", () => deleteCardHandler(cardInfo._id, cardElement));
-  }
   likeButton.addEventListener("click", () => likeCardHandler(cardInfo._id, likeButton, likeCount));
   cardImage.addEventListener("click", () =>
     clickImageHandler(cardImage, cardTitle)
@@ -59,10 +57,14 @@ function deleteCard(cardId, cardElement) {
 
 function likeCard(cardId, likeButton, likeCount) {
   const isLiked = likeButton.classList.contains("card__like-button_is-active");
-  likeCardServer(cardId)
-  .then(() => {
-
+  likeButton.classList.toggle("card__like-button_is-active")
+  likeCardServer(cardId, isLiked)
+  .then((result) => {
+    likeCount.textContent = result.likes.length;
   })
+  .catch((err) => {
+    console.error("Ошибка", err);
+  });
 }
 
 export { createCard, callbacks };

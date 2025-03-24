@@ -7,8 +7,7 @@ import {
   getInitialCards,
   getRenderCard,
   getUserData,
-  getEditProfile,
-  deleteCardServer,
+  editProfile,
 } from "./api.js";
 
 // @todo: Карточки
@@ -94,13 +93,18 @@ profileEditButton.addEventListener(
 // попап, редактирование профиля
 
 getUserData()
-  .then((result) => {
-    profileTitle.textContent = result.name;
-    profileDescription.textContent = result.about;
-  })
-  .catch((err) => {
-    console.error("Ошибка", err);
-  });
+.then((result) => {
+  profileTitle.textContent = result.name;
+  profileDescription.textContent = result.about;
+})
+.catch((err) => {
+  console.error("Ошибка", err);
+});
+
+function updateProfile(userData) {
+  profileTitle.textContent = userData.name;
+  profileDescription.textContent = userData.about;
+}
 
 function fillProfileInputs() {
     nameInput.value = profileTitle.textContent;
@@ -109,11 +113,14 @@ function fillProfileInputs() {
 
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
-  getEditProfile(nameInput.value, jobInput.value) 
+  editProfile(nameInput.value, jobInput.value)
+    .then((result) => {
+      updateProfile(result);
+      closeModal(popupProfile);
+    })
     .catch((err) => {
       console.error("Ошибка", err);
     });
-  closeModal(popupProfile);
 };
 
 

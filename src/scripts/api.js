@@ -40,7 +40,7 @@ export const getRenderCard = (name, link) => {
     .then(responseOk);
 }; 
 
-export const  getEditProfile = (name, about) => {
+export const  editProfile = (name, about) => {
   return fetch(`${config.baseUrl}/users/me`, {
     method: "PATCH",
     headers: config.headers,
@@ -60,12 +60,25 @@ export const  deleteCardServer = (cardId) => {
     .then(responseOk);
 };
 
-export const likeCardServer = (cardId) => {
+export const likeCardServer = (cardId, isLiked) => {
+  const method = isLiked ? "DELETE" : "PUT"
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: method,
     headers: config.headers,
   }).then(responseOk);
 };
+
+export const  editAvatar = (avatar) => {
+  return fetch(`${config.baseUrl}/users/me/avatar`, {
+    method: "PATCH",
+    headers: config.headers,
+    body: JSON.stringify({
+      avatar: avatar,
+    })
+  })
+    .then(responseOk);
+};
+
 
 
 
