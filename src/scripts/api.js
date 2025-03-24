@@ -14,7 +14,7 @@ function responseOk (res)  {
     return Promise.reject(`Ошибка: ${res.status}`);
 }
 
-export const  getUsersData = () => {
+export const  getUserData = () => {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers,
   })
@@ -52,12 +52,20 @@ export const  getEditProfile = (name, about) => {
     .then(responseOk);
 };
 
-export const  getDeleteCard = () => {
-  return fetch(`${config.baseUrl}/cards/_id`, {
+export const  deleteCardServer = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/${cardId}`, {
     method: "DELETE",
     headers: config.headers,
   })
     .then(responseOk);
 };
+
+export const likeCardServer = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: method,
+    headers: config.headers,
+  }).then(responseOk);
+};
+
 
 

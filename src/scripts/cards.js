@@ -1,5 +1,7 @@
 // @todo: Темплейт карточки
 
+import { deleteCardServer, likeCardServer } from "./api";
+
 const cardTemplate = document.querySelector("#card-template").content;
 
 // @todo: Функция создания карточки
@@ -24,8 +26,10 @@ function createCard(
   cardImage.src = cardInfo.link;
   cardImage.alt = cardInfo.name; 
   likeCount.textContent = cardInfo.likes.length;
-  deleteButton.addEventListener("click", deleteCardHandler);
-  likeButton.addEventListener("click", likeCardHandler);
+  if (userCardId) {
+    deleteButton.addEventListener("click", () => deleteCardHandler(cardInfo._id, cardElement));
+  }
+  likeButton.addEventListener("click", () => likeCardHandler(cardInfo._id, likeButton, likeCount));
   cardImage.addEventListener("click", () =>
     clickImageHandler(cardImage, cardTitle)
   );
@@ -41,17 +45,24 @@ const callbacks = {
 
 // @todo: Функция удаления карточки
 
-function deleteCard(evt) {
-  const card = evt.target.closest(".card");
-  card.remove();
+function deleteCard(cardId, cardElement) {
+  deleteCardServer(cardId)
+    .then(() => {
+      cardElement.remove();
+    })
+    .catch((err) => {
+      console.error("Ошибка", err);
+    });
 }
 
 // @todo: Функция лайка карточки
 
-function likeCard(evt) {
-  evt.target.classList.toggle("card__like-button_is-active");
+function likeCard(cardId, likeButton, likeCount) {
+  const isLiked = likeButton.classList.contains("card__like-button_is-active");
+  likeCardServer(cardId)
+  .then(() => {
+
+  })
 }
 
 export { createCard, callbacks };
-
- // deleteButton.classList.add("card__delete-button_inactive");

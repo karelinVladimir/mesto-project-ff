@@ -6,14 +6,15 @@ import { enableValidation, clearValidation } from "./validation.js";
 import {
   getInitialCards,
   getRenderCard,
-  getUsersData,
+  getUserData,
   getEditProfile,
-  getDeleteCard,
+  deleteCardServer,
 } from "./api.js";
 
 // @todo: Карточки
 
 const placesList = document.querySelector(".places__list");
+let userId;
 
 // @todo: Новые карточки
 
@@ -49,10 +50,9 @@ function renderCard(item, userId, method = "prepend") {
   placesList[method](cardElement);
 }
 
-Promise.all([getInitialCards(), getUsersData()])
+Promise.all([getInitialCards(), getUserData()])
   .then(([cards, users]) => { 
-    const userId = users._id
-    console.log(userId);
+    userId = users._id
     cards.forEach(card => {
       renderCard(card, userId, "append");
     });
@@ -68,9 +68,9 @@ function handleCardFormSubmit(evt) {
   getRenderCard(placeName, placeLink)
     .then((newCard) => {
       renderCard(newCard, userId);
-      closeModal(popupNewCard);
       placeForm.reset();
       clearValidation(placeForm, validationConfig);
+      closeModal(popupNewCard);
     })
     .catch((err) => {
       console.error("Ошибка", err);
@@ -78,16 +78,6 @@ function handleCardFormSubmit(evt) {
 };
 
 placeForm.addEventListener("submit", handleCardFormSubmit);
-
-// Удаление картоки на страницею
-
-getDeleteCard() 
-  then(() => {
-
-  })
-  .catch((err) => {
-    console.error("Ошибка", err);
-  });
 
 // Открытие попапов
 
@@ -103,7 +93,7 @@ profileEditButton.addEventListener(
 
 // попап, редактирование профиля
 
-getUsersData()
+getUserData()
   .then((result) => {
     profileTitle.textContent = result.name;
     profileDescription.textContent = result.about;
