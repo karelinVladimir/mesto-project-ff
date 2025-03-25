@@ -12,6 +12,11 @@ import {
 } from "./api.js";
 
 
+// @todo: Кнопки Submit
+
+const submitButtonAvatar = document.querySelector(".popup__button-avatar");
+const submitButtonProfile = document.querySelector(".popup__button-profile");
+const submitButtonPlace = document.querySelector(".popup__button-place");
 
 // @todo: Карточки
 
@@ -62,11 +67,14 @@ function renderCard(item, userId, method = "prepend") {
 }
 
 Promise.all([getInitialCards(), getUserData()])
-  .then(([cards, users]) => { 
-    userId = users._id
+  .then(([cards, userData]) => { 
+    userId = userData._id;
     cards.forEach(card => {
       renderCard(card, userId, "append");
     });
+    profileTitle.textContent = userData.name;
+    profileDescription.textContent = userData.about;
+    avatarImage.style.backgroundImage = `url('${userData.avatar}')`;
   })
   .catch((err) => {
     console.error("Ошибка", err);
@@ -76,7 +84,7 @@ function handleCardFormSubmit(evt) {
   evt.preventDefault();
   const placeName = placeForm.elements["place-name"].value;
   const placeLink = placeForm.elements.link.value;
-  setButtonLoading(true);
+  setButtonLoading(submitButtonPlace, true);
   getRenderCard(placeName, placeLink)
     .then((newCard) => {
       renderCard(newCard, userId);
@@ -88,7 +96,7 @@ function handleCardFormSubmit(evt) {
       console.error("Ошибка", err);
     })
     .finally(() => {
-      setButtonLoading(false)
+      setButtonLoading(submitButtonPlace, false);
     });
 };
 
@@ -116,7 +124,7 @@ function updateAvatar(updateImage) {
 function handleAvatarFormSubmit(evt) {
   evt.preventDefault();
   const avatarLink = avatarInput.value;
-  setButtonLoading(true);
+  setButtonLoading(submitButtonAvatar, true);
   editAvatar(avatarLink)
   .then(() => {
     updateAvatar(avatarLink);
@@ -128,23 +136,13 @@ function handleAvatarFormSubmit(evt) {
     console.error("Ошибка", err);
   })
   .finally(() => {
-    setButtonLoading(false);
+    setButtonLoading(submitButtonAvatar, false);
   })
 }
 
 avatarForm.addEventListener("submit", handleAvatarFormSubmit);
 
 // попап, редактирование профиля
-
-getUserData()
-.then((result) => {
-  profileTitle.textContent = result.name;
-  profileDescription.textContent = result.about;
-  avatarImage.style.backgroundImage = `url('${result.avatar}')`;
-})
-.catch((err) => {
-  console.error("Ошибка", err);
-});
 
 function updateProfile(userData) {
   profileTitle.textContent = userData.name;
@@ -158,7 +156,7 @@ function fillProfileInputs() {
 
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
-  setButtonLoading(true);
+  setButtonLoading(submitButtonProfile, true);
   editProfile(nameInput.value, jobInput.value)
     .then((result) => {
       updateProfile(result);
@@ -168,7 +166,7 @@ function handleProfileFormSubmit(evt) {
       console.error("Ошибка", err);
     })
     .finally(() => {
-      setButtonLoading(false);
+      setButtonLoading(submitButtonProfile, false);
     });
 };
 
@@ -201,20 +199,15 @@ enableValidation(validationConfig);
 
 // // @todo: Улучшенный UX форм
 
-const popupForms = document.querySelectorAll(".popup__form");
-
-function setButtonLoading (isLoading) {
-  popupForms.forEach((button) => {
-    const submitButton = button.querySelector(".popup__button");
-    if (isLoading) {
-      submitButton.textContent = "Сохранение...";
-      submitButton.disabled = true;
-    } 
-    else {
-      submitButton.textContent = "Сохранить";
-      submitButton.disabled = false;
-    }
-  });
+function setButtonLoading (submitButton, isLoading) {
+  if (isLoading) {
+    submitButton.textContent = "Сохранение...";
+    submitButton.disabled = true;
+  } 
+  else {
+    submitButton.textContent = "Сохранить";
+    submitButton.disabled = false;
+  }
 };
 
 

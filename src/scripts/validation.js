@@ -25,6 +25,7 @@ const hideInputError = (
   inputElement.classList.remove(inputErrorClass);
   errorElement.classList.remove(errorClass);
   errorElement.textContent = "";
+  inputElement.setCustomValidity("");
 };
 
 // @todo: Функция проверки валидации

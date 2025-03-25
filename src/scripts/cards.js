@@ -16,13 +16,17 @@ function createCard(
   const cardImage = cardElement.querySelector(".card__image");
   const cardTitle = cardElement.querySelector(".card__title");
   const likeCount = cardElement.querySelector(".card__like-count");
+  const isLiked = cardInfo.likes.some((user) => user._id === userId);
+  if (isLiked) {
+    likeButton.classList.add("card__like-button_is-active");
+  }
   const userCardId = cardInfo.owner._id === userId;
   if (userCardId) {
     deleteButton.classList.remove("card__delete-button_inactive");
     deleteButton.addEventListener("click", () => deleteCardHandler(cardInfo._id, cardElement));
   } else {
     deleteButton.classList.add("card__delete-button_inactive");
-  }
+  };
   cardTitle.textContent = cardInfo.name;
   cardImage.src = cardInfo.link;
   cardImage.alt = cardInfo.name; 
@@ -57,10 +61,10 @@ function deleteCard(cardId, cardElement) {
 
 function likeCard(cardId, likeButton, likeCount) {
   const isLiked = likeButton.classList.contains("card__like-button_is-active");
-  likeButton.classList.toggle("card__like-button_is-active")
   likeCardServer(cardId, isLiked)
   .then((result) => {
     likeCount.textContent = result.likes.length;
+    likeButton.classList.toggle("card__like-button_is-active");
   })
   .catch((err) => {
     console.error("Ошибка", err);
