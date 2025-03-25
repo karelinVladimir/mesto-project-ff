@@ -1,3 +1,3 @@
-https://github.com/karelinVladimir/mesto-project-ff.git
+https://karelinvladimir.github.io/mesto-project-ff/
 
 # Проектная работа Mesto
