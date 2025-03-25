@@ -8,7 +8,10 @@ import {
   getRenderCard,
   getUserData,
   editProfile,
+  editAvatar,
 } from "./api.js";
+
+
 
 // @todo: Карточки
 
@@ -24,8 +27,17 @@ const placeForm = document.forms["new-place"];
 
 const profileAddButton = document.querySelector(".profile__add-button");
 const profileEditButton = document.querySelector(".profile__edit-button");
+const profileAvatarButton = document.querySelector(".profile__avatar-button");
 const popupTypeEdit = document.querySelector(".popup_type_edit");
 const popupTypeNewCard = document.querySelector(".popup_type_new-card");
+const popupTypeAvatar = document.querySelector(".popup_type_avatar");
+
+// @todo: Аватар
+
+const popupAvatar = document.querySelector(".popup_type_avatar");
+const avatarForm = document.forms["edit-avatar"]
+const avatarInput = avatarForm.elements.link;
+const avatarImage = document.querySelector(".profile__image");
 
 // @todo: Редактирование профиля
 
@@ -64,6 +76,7 @@ function handleCardFormSubmit(evt) {
   evt.preventDefault();
   const placeName = placeForm.elements["place-name"].value;
   const placeLink = placeForm.elements.link.value;
+  setButtonLoading(true);
   getRenderCard(placeName, placeLink)
     .then((newCard) => {
       renderCard(newCard, userId);
@@ -73,6 +86,9 @@ function handleCardFormSubmit(evt) {
     })
     .catch((err) => {
       console.error("Ошибка", err);
+    })
+    .finally(() => {
+      setButtonLoading(false)
     });
 };
 
@@ -81,6 +97,7 @@ placeForm.addEventListener("submit", handleCardFormSubmit);
 // Открытие попапов
 
 profileAddButton.addEventListener("click", () => openModal(popupTypeNewCard));
+profileAvatarButton.addEventListener("click", () => openModal(popupTypeAvatar));
 profileEditButton.addEventListener(
   "click",
   () => {
@@ -90,12 +107,40 @@ profileEditButton.addEventListener(
   }
 );
 
+// попап, замена аватара
+
+function updateAvatar(updateImage) {
+  avatarImage.style.backgroundImage = `url('${updateImage}')`;
+}
+
+function handleAvatarFormSubmit(evt) {
+  evt.preventDefault();
+  const avatarLink = avatarInput.value;
+  setButtonLoading(true);
+  editAvatar(avatarLink)
+  .then(() => {
+    updateAvatar(avatarLink);
+    closeModal(popupAvatar);
+    avatarForm.reset();
+    clearValidation(avatarForm, validationConfig);
+  })
+  .catch((err) => {
+    console.error("Ошибка", err);
+  })
+  .finally(() => {
+    setButtonLoading(false);
+  })
+}
+
+avatarForm.addEventListener("submit", handleAvatarFormSubmit);
+
 // попап, редактирование профиля
 
 getUserData()
 .then((result) => {
   profileTitle.textContent = result.name;
   profileDescription.textContent = result.about;
+  avatarImage.style.backgroundImage = `url('${result.avatar}')`;
 })
 .catch((err) => {
   console.error("Ошибка", err);
@@ -113,6 +158,7 @@ function fillProfileInputs() {
 
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
+  setButtonLoading(true);
   editProfile(nameInput.value, jobInput.value)
     .then((result) => {
       updateProfile(result);
@@ -120,6 +166,9 @@ function handleProfileFormSubmit(evt) {
     })
     .catch((err) => {
       console.error("Ошибка", err);
+    })
+    .finally(() => {
+      setButtonLoading(false);
     });
 };
 
@@ -150,8 +199,23 @@ const validationConfig = {
 enableValidation(validationConfig); 
 
 
+// // @todo: Улучшенный UX форм
 
+const popupForms = document.querySelectorAll(".popup__form");
 
+function setButtonLoading (isLoading) {
+  popupForms.forEach((button) => {
+    const submitButton = button.querySelector(".popup__button");
+    if (isLoading) {
+      submitButton.textContent = "Сохранение...";
+      submitButton.disabled = true;
+    } 
+    else {
+      submitButton.textContent = "Сохранить";
+      submitButton.disabled = false;
+    }
+  });
+};
 
 
 
